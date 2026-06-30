@@ -1,0 +1,30 @@
+{
+  "timestamp": "20260629-210027",
+  "model": "anthropic/claude-opus-4.8",
+  "task": "quant_gemm_w4a16_packed_asym",
+  "samples": 2,
+  "n_pass": 1,
+  "pass_at_1": 0.5,
+  "records": [
+    {
+      "sample": 0,
+      "static_ok": true,
+      "correct": true,
+      "max_err": 0.01319122314453125,
+      "speedup_vs_compile": 0.6117393658493375,
+      "speedup_vs_eager": 2.777732940501115,
+      "pass": false,
+      "error": null
+    },
+    {
+      "sample": 1,
+      "static_ok": true,
+      "correct": true,
+      "max_err": 0.014209747314453125,
+      "speedup_vs_compile": 2.7835498345459824,
+      "speedup_vs_eager": 2.7835498345459824,
+      "pass": true,
+      "error": null
+    }
+  ]
+}

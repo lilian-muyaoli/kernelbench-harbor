@@ -1,0 +1,22 @@
+schema_version = "1.3"
+
+[task]
+name = "kernelbench-harbor/moe_top8__qwen2_57b__T512__fp16"
+description = "Top-8 MoE FFN, qwen2_57b (D=3584,E=64,H=2560), T=512, fp16."
+authors = [{ name = "AfterQuery trial", email = "muyaosh18@gmail.com" }]
+keywords = ["gpu", "triton", "moe", "performance"]
+
+[environment]
+os = "linux"
+cpus = 4
+memory_mb = 16384
+gpus = 1
+gpu_types = ["L40S"]
+network_mode = "public"
+build_timeout_sec = 1800.0
+
+[agent]
+timeout_sec = 1200.0
+
+[verifier]
+timeout_sec = 1200.0

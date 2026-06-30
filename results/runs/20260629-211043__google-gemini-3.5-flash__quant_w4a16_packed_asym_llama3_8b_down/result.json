@@ -1,0 +1,30 @@
+{
+  "timestamp": "20260629-211043",
+  "model": "google/gemini-3.5-flash",
+  "task": "quant_w4a16_packed_asym_llama3_8b_down",
+  "samples": 2,
+  "n_pass": 0,
+  "pass_at_1": 0.0,
+  "records": [
+    {
+      "sample": 0,
+      "static_ok": true,
+      "correct": false,
+      "max_err": null,
+      "speedup_vs_compile": null,
+      "speedup_vs_eager": null,
+      "pass": false,
+      "error": "SyntaxError: '(' was never closed (kb_gen.py, line 44)\nTraceback (most recent call last):\n  File \"/root/measure_pass1.py\", line 361, in evaluate\n    genmod = load_module(gen_src, \"kb_gen\")\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/measure_pass1.py\", line 332, in load_module\n    spec.loader.exec_module(mod)\n  File \"<frozen importlib._bootstrap_external>\", line 936, in exec_module\n  File \"<frozen importlib._bootstrap_external>\", line 1074, in get_code\n  File \"<frozen importlib._bootstrap_external>\", line 1004, in source_to_code\n  File \"<frozen importlib._bootstrap>\", line 241, in _call_with_frames_removed\n  File \"/tmp/kb_gen.py\", line 44\n    x_mask = (offs_m[:, None] <\n             ^\nSyntaxError: '(' was never closed\n"
+    },
+    {
+      "sample": 1,
+      "static_ok": true,
+      "correct": false,
+      "max_err": null,
+      "speedup_vs_compile": null,
+      "speedup_vs_eager": null,
+      "pass": false,
+      "error": "CompilationError: at 65:32:\n        scale_val = tl.load(scale_ptrs, mask=mask_sz, other=0.0)\n        zero_val = tl.load(zero_ptrs, mask=mask_sz, other=0.0)\n\n        # Dequantize\n        w_dequant = (w.to(x_val.dtype) - zero_val.to(x_val.dtype)) * scale_val.to(x_val.dtype)\n\n        # Accumulate dot product\n        accum = tl.dot(x_val.to(tl.float16), w_dequant.to(tl.float16), accum)\n\n    out_ptrs = out_ptr + offs_m_clamped[:, None] * stride_out_m + offs_n_clamped[None, :] * stride_out_n\n    mask_out = (offs_m[:, None] < M) & (offs_n[None, :] < N)\n    tl.store(out_ptrs, accum.to(x_val.dtype), mask=mask_out)\n                                ^\nNameError('x_val is not defined')\n, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)\n                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/runtime/jit.py\", line 662, in run\n    kernel = self.compile(\n             ^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 276, in compile\n    module = src.make_ir(options, codegen_fns, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 113, in make_ir\n    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntriton.compiler.errors.CompilationError: at 65:32:\n        scale_val = tl.load(scale_ptrs, mask=mask_sz, other=0.0)\n        zero_val = tl.load(zero_ptrs, mask=mask_sz, other=0.0)\n\n        # Dequantize\n        w_dequant = (w.to(x_val.dtype) - zero_val.to(x_val.dtype)) * scale_val.to(x_val.dtype)\n\n        # Accumulate dot product\n        accum = tl.dot(x_val.to(tl.float16), w_dequant.to(tl.float16), accum)\n\n    out_ptrs = out_ptr + offs_m_clamped[:, None] * stride_out_m + offs_n_clamped[None, :] * stride_out_n\n    mask_out = (offs_m[:, None] < M) & (offs_n[None, :] < N)\n    tl.store(out_ptrs, accum.to(x_val.dtype), mask=mask_out)\n                                ^\nNameError('x_val is not defined')\n"
+    }
+  ]
+}

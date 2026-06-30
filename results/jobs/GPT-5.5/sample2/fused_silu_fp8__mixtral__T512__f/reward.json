@@ -1,0 +1,8 @@
+{
+  "reward": 0,
+  "correct": false,
+  "speedup_vs_compile": null,
+  "metric": "cosine",
+  "cosine_min": null,
+  "error": "CompilationError: at 14:19:\n    row = pid // G\n    grp = pid - row * G\n    offs = tl.arange(0, BLOCK)\n    base = row * H2 + grp * BLOCK + offs\n\n    gate = tl.load(y_ptr + base).to(tl.float32)\n    up = tl.load(y_ptr + base + H).to(tl.float32)\n\n    # silu(gate) * up = gate * sigmoid(gate) * up\n    act = (gate / (1.0 + tl.exp(-gate))) * up\n    amax = tl.max(tl.abs(act), axis=0)\n    scale = amax / FP8_MAX\n                   ^\nNameError(\"Cannot access global variable FP8_MAX from within @jit'ed function. Triton kernels can only access global variables that are annotated as constexpr (`x: triton.language.constexpr = 42` or `x = triton.language.constexpr(42)`).  Alternatively, set the envvar TRITON_ALLOW_NON_CONSTEXPR_GLOBALS=1, but we do not promise to support this forever.\")"
+}

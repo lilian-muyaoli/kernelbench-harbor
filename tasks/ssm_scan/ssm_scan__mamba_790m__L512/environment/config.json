@@ -1,0 +1,8 @@
+{
+  "atol": 0.02,
+  "rtol": 0.02,
+  "speedup_threshold": 1.0,
+  "num_correctness_trials": 5,
+  "warmup": 25,
+  "perf_trials": 100
+}

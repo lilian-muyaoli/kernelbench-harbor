@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+.DS_Store
+.modal/
+.venv/
+*.egg-info/
+scratchpad/
+presentation/slides.pdf
+*.pdf

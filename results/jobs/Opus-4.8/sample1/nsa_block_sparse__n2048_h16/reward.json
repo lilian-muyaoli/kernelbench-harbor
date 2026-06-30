@@ -1,0 +1,11 @@
+{
+  "reward": 0,
+  "correct": false,
+  "speedup_vs_compile": null,
+  "speedup_vs_eager": null,
+  "max_err": null,
+  "static_ok": true,
+  "compile_ok": null,
+  "suspicious": false,
+  "error": "AttributeError: module 'kb_sol' has no attribute 'ModelNew'\nTraceback (most recent call last):\n  File \"/app/kb_verifier.py\", line 183, in grade\n    ModelNew = genmod.ModelNew\n               ^^^^^^^^^^^^^^^\nAttributeError: module 'kb_sol' has no attribute 'ModelNew'\n"
+}

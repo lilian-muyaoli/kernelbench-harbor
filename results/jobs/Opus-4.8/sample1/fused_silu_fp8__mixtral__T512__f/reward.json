@@ -1,0 +1,8 @@
+{
+  "reward": 0,
+  "correct": false,
+  "speedup_vs_compile": null,
+  "metric": "cosine",
+  "cosine_min": null,
+  "error": "SyntaxError: leading zeros in decimal integer literals are not permitted; use an 0o prefix for octal integers (kb_Opus_4_8__sample1__fused_silu_fp8__mixtral__T512__f.py, line 76)"
+}

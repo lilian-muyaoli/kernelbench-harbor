@@ -1,0 +1,8 @@
+{
+  "reward": 1,
+  "correct": true,
+  "speedup_vs_compile": 1.3930554704448181,
+  "metric": "cosine",
+  "cosine_min": 0.9999862909317017,
+  "error": null
+}

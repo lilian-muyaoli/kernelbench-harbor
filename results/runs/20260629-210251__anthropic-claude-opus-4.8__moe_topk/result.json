@@ -1,0 +1,30 @@
+{
+  "timestamp": "20260629-210251",
+  "model": "anthropic/claude-opus-4.8",
+  "task": "moe_topk",
+  "samples": 2,
+  "n_pass": 0,
+  "pass_at_1": 0.0,
+  "records": [
+    {
+      "sample": 0,
+      "static_ok": true,
+      "correct": true,
+      "max_err": 0.001760244369506836,
+      "speedup_vs_compile": 0.3106301714877011,
+      "speedup_vs_eager": 0.2513526519536766,
+      "pass": false,
+      "error": null
+    },
+    {
+      "sample": 1,
+      "static_ok": true,
+      "correct": true,
+      "max_err": 0.0009930133819580078,
+      "speedup_vs_compile": 0.6045801521290586,
+      "speedup_vs_eager": 0.6045801521290586,
+      "pass": false,
+      "error": null
+    }
+  ]
+}

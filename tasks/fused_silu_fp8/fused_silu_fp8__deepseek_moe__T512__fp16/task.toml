@@ -1,0 +1,22 @@
+schema_version = "1.3"
+
+[task]
+name = "kernelbench-harbor/fused_silu_fp8__deepseek_moe__T512__fp16"
+description = "Fused SiLU+mul+per-group FP8 quant, deepseek_moe (H=1408), T=512, fp16."
+authors = [{ name = "AfterQuery trial", email = "muyaosh18@gmail.com" }]
+keywords = ["gpu", "triton", "fused", "fp8", "moe", "performance"]
+
+[environment]
+os = "linux"
+cpus = 4
+memory_mb = 16384
+gpus = 1
+gpu_types = ["L40S"]
+network_mode = "public"
+build_timeout_sec = 1800.0
+
+[agent]
+timeout_sec = 1200.0
+
+[verifier]
+timeout_sec = 1200.0

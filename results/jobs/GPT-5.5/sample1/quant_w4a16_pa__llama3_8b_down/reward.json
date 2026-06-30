@@ -1,0 +1,11 @@
+{
+  "reward": 0,
+  "correct": false,
+  "speedup_vs_compile": null,
+  "speedup_vs_eager": null,
+  "max_err": null,
+  "static_ok": true,
+  "compile_ok": null,
+  "suspicious": false,
+  "error": "CompilationError: at 24:15:\n\n    for k0 in range(0, K, BLOCK_K):\n        ks = k0 + offs_k\n        xv = tl.load(x + offs_m[:, None] * K + ks[None, :], mask=(offs_m[:, None] < M), other=0.0)\n\n        qw = tl.load(qweight + ks[:, None] * n_words + word_cols[None, :], mask=offs_n[None, :] < N, other=0)\n        qv = (qw >> shifts[None, :]) & 15\n        grp = k0 // 128\n        sc = tl.load(scales + grp * N + offs_n, mask=offs_n < N, other=0.0).to(tl.float32)\n        ze = tl.load(zeros + grp * N + offs_n, mask=offs_n < N, other=0.0).to(tl.float32)\n        wv = (qv.to(tl.float32) - ze[None, :]) * sc[None, :]\n        acc += tl.dot(xv, wv, input_precision=\"tf32\")\n               ^\n \"/opt/conda/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 276, in compile\n    module = src.make_ir(options, codegen_fns, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/conda/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 113, in make_ir\n    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntriton.compiler.errors.CompilationError: at 24:15:\n\n    for k0 in range(0, K, BLOCK_K):\n        ks = k0 + offs_k\n        xv = tl.load(x + offs_m[:, None] * K + ks[None, :], mask=(offs_m[:, None] < M), other=0.0)\n\n        qw = tl.load(qweight + ks[:, None] * n_words + word_cols[None, :], mask=offs_n[None, :] < N, other=0)\n        qv = (qw >> shifts[None, :]) & 15\n        grp = k0 // 128\n        sc = tl.load(scales + grp * N + offs_n, mask=offs_n < N, other=0.0).to(tl.float32)\n        ze = tl.load(zeros + grp * N + offs_n, mask=offs_n < N, other=0.0).to(tl.float32)\n        wv = (qv.to(tl.float32) - ze[None, :]) * sc[None, :]\n        acc += tl.dot(xv, wv, input_precision=\"tf32\")\n               ^\n"
+}

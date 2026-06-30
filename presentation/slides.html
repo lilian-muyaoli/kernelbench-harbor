@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KernelBench-Harbor — v2 (trial-section structure)</title>
+<style>
+  :root{
+    --bg:#0f1419; --panel:#161b22; --ink:#e6edf3; --muted:#8b949e;
+    --accent:#3fb950; --accent2:#58a6ff; --bad:#6e7681; --warn:#d29922; --line:#30363d;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif}
+  #deck{height:100vh;width:100vw;overflow:hidden;position:relative}
+  .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:6vh 8.5vw;animation:fade .25s ease}
+  .slide.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .eyebrow{font-size:1.05vw;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);
+    font-weight:700;margin-bottom:1.6vh}
+  h1{font-size:3.4vw;margin:0 0 1.8vh;line-height:1.1}
+  h2{font-size:2.3vw;margin:0 0 3vh;line-height:1.2}
+  h3{font-size:1.32vw;margin:0 0 .7vh;color:var(--accent2)}
+  p,li,td,th{font-size:1.24vw;line-height:1.65}
+  .muted{color:var(--muted)} .accent{color:var(--accent)} .blue{color:var(--accent2)} .warn{color:var(--warn)}
+  ul{margin:.6vh 0;padding-left:1.2em} li{margin:1.1vh 0}
+  .sub{font-size:1.45vw;color:var(--muted);margin-top:2vh}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:3.4vw;align-items:start}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8vw}
+  table{border-collapse:collapse;width:100%}
+  th,td{border:1px solid var(--line);padding:.9vh .95vw;text-align:left}
+  th{background:var(--panel);color:var(--muted);font-weight:600}
+  td.c,th.c{text-align:center}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:2vh 1.5vw}
+  .yes{color:var(--accent);font-weight:700} .no{color:var(--bad)}
+  .quote{font-size:1.55vw;font-style:italic;color:var(--accent2);border-left:3px solid var(--accent2);
+    padding-left:1vw;margin-top:1.6vh}
+  .small{font-size:1.16vw;line-height:1.5} .center{align-items:center;text-align:center}
+  code{background:#1f2630;padding:.05em .35em;border-radius:4px;font-size:.95em}
+  .tag{font-size:1vw;color:var(--bg);background:var(--accent);border-radius:6px;padding:.15em .6em;font-weight:700}
+  .lead{font-size:1.55vw;line-height:1.5}
+  /* architecture diagram (scoped arch-) */
+  .arch{display:flex;gap:1.1vw;align-items:stretch;width:100%;margin-top:2vh}
+  .arch-col{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:1.8vh 1.1vw;display:flex;flex-direction:column;gap:1.1vh;min-width:0}
+  .arch-col.loop{border-color:rgba(210,153,34,.4)} .arch-col.ver{border-color:rgba(63,185,80,.35)}
+  .arch-h{font-size:1.05vw;font-weight:700;color:#fff;border-bottom:1px solid var(--line);
+    padding-bottom:.5vh;display:flex;justify-content:space-between;align-items:center}
+  .arch-badge{font-size:.7vw;background:var(--line);color:var(--muted);padding:.1em .5em;border-radius:10px;text-transform:uppercase}
+  .arch-card{background:#1f242c;border:1px solid var(--line);border-radius:6px;padding:1.2vh 1vw}
+  .arch-ct{font-size:.8vw;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700;margin-bottom:.6vh}
+  .arch-cc{font-size:.94vw;line-height:1.5;color:#c9d1d9}
+  .arch pre{font-family:ui-monospace,Menlo,monospace;font-size:.8vw;background:#0f1419;border:1px solid var(--line);
+    border-radius:4px;padding:.8vh .8vw;margin:.6vh 0 0;line-height:1.45;overflow:hidden;color:#e6edf3}
+  .arch code{background:#0f1419;color:#ff7b72;padding:.05em .3em;border-radius:3px;font-size:.95em}
+  .arch .keyword{color:#ff7b72}.arch .class-name{color:#f0883e}.arch .comment{color:#8b949e}.arch .decorator{color:#d29922}
+  .arch-conn{display:flex;align-items:center;color:var(--muted);font-size:1.5vw}
+  .arch-loopbox{border:2px dashed rgba(210,153,34,.45);border-radius:8px;padding:1.6vh 1vw;display:flex;
+    flex-direction:column;gap:.95vh;position:relative;background:rgba(210,153,34,.03)}
+  .arch-loopbadge{position:absolute;top:-1.1vh;right:.8vw;background:var(--warn);color:var(--bg);font-size:.66vw;
+    font-weight:800;padding:.05em .5em;border-radius:10px;text-transform:uppercase}
+  .arch-arrow{text-align:center;color:var(--muted);font-size:.95vw}
+  .arch-fb{background:#0f1419;border:1px solid var(--line);border-radius:5px;padding:.5vh .6vw;display:flex;flex-direction:column;gap:.35vh}
+  .arch-ch{font-size:.76vw;display:flex;align-items:center;gap:.5vw;color:var(--muted)}
+  .arch-dot{width:.5vw;height:.5vw;border-radius:50%;flex-shrink:0}
+  .arch-badges{display:flex;gap:.5vw;margin-top:.5vh}
+  .b-ok{background:rgba(63,185,80,.15);color:var(--accent);border:1px solid rgba(63,185,80,.3);font-size:.74vw;font-weight:700;padding:.05em .45em;border-radius:4px}
+  .b-no{background:rgba(248,81,73,.15);color:var(--bad);border:1px solid rgba(248,81,73,.3);font-size:.74vw;font-weight:700;padding:.05em .45em;border-radius:4px}
+  .arch-vs{display:flex;align-items:center;justify-content:center;gap:.5vw;background:#0f1419;border:1px solid var(--line);
+    border-radius:5px;padding:.45vh .5vw;font-size:.78vw;margin-top:.5vh}
+  footer{position:absolute;bottom:2vh;left:6vw;right:6vw;display:flex;justify-content:space-between;
+    color:var(--muted);font-size:.92vw;border-top:1px solid var(--line);padding-top:1vh}
+  /* PDF export: print every slide, one 16:9 page each */
+  @media print {
+    @page { size: 1280px 720px; margin: 0; }
+    html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    #deck { height: auto; overflow: visible; }
+    .slide { display: flex !important; position: relative; inset: auto;
+      width: 1280px; height: 720px; break-after: page; page-break-after: always; animation: none; }
+    .slide:last-child { break-after: auto; page-break-after: auto; }
+  }
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- TITLE -->
+<section class="slide center">
+  <span class="tag">AfterQuery · work trial</span>
+  <h1 style="margin-top:2vh">KernelBench&#8209;Harbor</h1>
+  <p class="lead">A harder, fairer, <span class="accent">agentic</span> redesign of KernelBench —
+  can a model <b>iteratively write a Triton kernel that beats <code>torch.compile</code></b> on
+  the architectures people actually serve?</p>
+  <p class="sub">10 modern families · ~132 tasks · pass@2 on GPT-5.5 / Opus-4.8 / Gemini-3.5-flash</p>
+</section>
+
+<!-- §1 CHOSEN DOMAIN -->
+<section class="slide">
+  <div class="eyebrow">§1 · Chosen domain</div>
+  <h2>GPU kernel generation — and why it's a meaningful extension</h2>
+  <div class="grid2">
+    <div>
+      <p class="lead">Domain: <b>write a fast GPU kernel</b> for a given PyTorch module. We extend
+      <b>KernelBench</b> (Stanford, arXiv:2502.10517) into an <b>agentic</b>, modern-ops,
+      beat-the-compiler benchmark.</p>
+      <ul>
+        <li><b>High real value</b> — kernels are the bottleneck of LLM training/serving cost.</li>
+        <li><b>Frontier-relevant</b> — writing fast GPU code is exactly where models are still weak.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Verification is unambiguous</h3>
+      <p class="small">Ask the model to <b>rewrite the PyTorch reference into a custom Triton kernel</b>;
+      the verifier checks <b>(1) the output matches</b> the reference and <b>(2) how much the runtime
+      improves</b> over <code>torch.compile</code>.</p>
+      <p class="small accent">→ correctness + a numeric speedup = a clean, objective pass/fail.</p>
+    </div>
+  </div>
+</section>
+
+<!-- §2 BENCHMARK ANALYSIS -->
+<section class="slide">
+  <div class="eyebrow">§2 · Benchmark analysis</div>
+  <h2>The original KernelBench is now too easy for frontier models</h2>
+  <table>
+    <tr><th>Weakness</th><th>Why it makes tasks easy</th></tr>
+    <tr><td><b>Single-shot</b></td><td>no compile/profile feedback — measures recall, not engineering like a human</td></tr>
+    <tr><td><b>Classic ops</b></td><td>conv/matmul/elementwise are memorized; flash-attn is known</td></tr>
+    <tr><td><b>Weak baseline (eager)</b></td><td>beating eager is easy; <b>torch.compile(max-autotune)</b> runs after compiler optimizations, so it's faster</td></tr>
+  </table>
+  <p class="sub">After researching where models still fail, the hard pockets are <b>modern, quantized, fused</b> ops — so that's where we build.</p>
+</section>
+
+<!-- §3 TASK DESIGN — axes -->
+<section class="slide">
+  <div class="eyebrow">§3 · Redesign &amp; task design</div>
+  <h2>Four main improvements over the original KernelBench</h2>
+  <div class="grid2">
+    <div class="card"><h3>① Agentic</h3><p class="small">Harbor container; the model compiles, runs,
+      reads errors, resubmits over <b>4 turns</b>. Harder interaction forces harder tasks.</p></div>
+    <div class="card"><h3>② Modern SOTA architectures</h3><p class="small">NSA, MLA, MoE, quant, fused —
+      more complex and state-of-the-art than KernelBench's classic ops.</p></div>
+    <div class="card"><h3>③ Strong baseline</h3><p class="small">Gate = beat
+      <b><code>torch.compile(max-autotune)</code></b>; <span class="muted">eager speedup also reported.</span>
+      Correct-but-slow fails.</p></div>
+    <div class="card"><h3>④ Anti-cheat (pytorch2triton)</h3><p class="small">AST bans offloading core
+      compute to <code>torch.matmul</code>/softmax/sdpa/cuBLAS; requires a real <code>@triton.jit</code>.</p></div>
+  </div>
+</section>
+
+<!-- §3 ARCHITECTURE -->
+<section class="slide" style="padding:5vh 4vw">
+  <div class="eyebrow">§3 · Redesign &amp; task design</div>
+  <h2 style="margin-bottom:1.5vh">How it works — the agentic verify pipeline</h2>
+  <div class="arch">
+
+    <!-- INPUT -->
+    <div class="arch-col">
+      <div class="arch-h"><span>Input</span><span class="arch-badge">Phase 1</span></div>
+      <div class="arch-card">
+        <div class="arch-ct">Task instruction</div>
+        <div class="arch-cc">Given a naive PyTorch <code>Model</code>, write an optimized
+          <code>ModelNew</code> with a real <code>@triton.jit</code> kernel — <b>correct</b> and
+          <b>faster than <code>torch.compile</code></b>. Don't offload core compute.</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-ct">reference.py (the "question")</div>
+        <pre><span class="keyword">class</span> <span class="class-name">Model</span>(nn.Module):
+    <span class="keyword">def</span> <span class="class-name">forward</span>(self, x, ...):
+        <span class="comment"># modern SOTA op:</span>
+        <span class="comment"># NSA / MLA / MoE / quant / fused</span>
+        ...
+<span class="keyword">def</span> <span class="class-name">get_inputs</span>(): ...  <span class="comment"># real HF shapes</span></pre>
+      </div>
+    </div>
+
+    <div class="arch-conn">&#8594;</div>
+
+    <!-- AGENTIC LOOP -->
+    <div class="arch-col loop">
+      <div class="arch-h" style="color:var(--warn)"><span>Agentic refinement</span>
+        <span class="arch-badge" style="background:rgba(210,153,34,.15);color:var(--warn)">Phase 2</span></div>
+      <div class="arch-loopbox">
+        <div class="arch-loopbadge">up to 4 turns · 3 min</div>
+        <div class="arch-card" style="border-color:var(--accent2)">
+          <div class="arch-ct" style="color:var(--accent2)">Model (agent)</div>
+          <div class="arch-cc">Reads container feedback and fixes compile / numeric / perf issues turn by turn.</div>
+        </div>
+        <div class="arch-arrow">&#9660;</div>
+        <div class="arch-card">
+          <div class="arch-ct">Generated code</div>
+          <pre><span class="decorator">@triton.jit</span>
+<span class="keyword">def</span> <span class="class-name">kernel</span>(...): ...
+<span class="keyword">class</span> <span class="class-name">ModelNew</span>(nn.Module): ...</pre>
+        </div>
+        <div class="arch-arrow">&#9660; &#9650;</div>
+        <div class="arch-card">
+          <div class="arch-ct" style="color:var(--warn)">Harbor sandbox · Modal L40S</div>
+          <div class="arch-fb">
+            <div class="arch-ch"><span class="arch-dot" style="background:var(--bad)"></span>Compile &amp; linker errors</div>
+            <div class="arch-ch"><span class="arch-dot" style="background:var(--warn)"></span>Output-mismatch logs</div>
+            <div class="arch-ch"><span class="arch-dot" style="background:var(--accent2)"></span>Performance profiles</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arch-conn">&#8594;</div>
+
+    <!-- VERIFIER -->
+    <div class="arch-col ver">
+      <div class="arch-h" style="color:var(--accent)"><span>Verifier</span>
+        <span class="arch-badge" style="background:rgba(63,185,80,.15);color:var(--accent)">Phase 3</span></div>
+      <div class="arch-card">
+        <div class="arch-ct">① AST anti-cheat</div>
+        <div class="arch-cc">Require a real <code>@triton.jit</code>; ban offloading core compute to
+          <code>matmul / softmax / sdpa / cuBLAS</code>.</div>
+        <div class="arch-badges"><span class="b-ok">✓ real Triton</span><span class="b-no">✗ offloaded</span></div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-ct">② Correctness</div>
+        <div class="arch-cc">vs <b>fp32 ground truth</b>, dtype-aware tolerance (cosine for discrete-output families).</div>
+        <div class="arch-badges"><span class="b-ok">✓ match</span><span class="b-no">✗ mismatch</span></div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-ct" style="color:#fff">③ Performance gate</div>
+        <div class="arch-cc">median runtime vs <code>torch.compile(max-autotune)</code> (eager also reported).</div>
+        <div class="arch-vs">speedup &#8805; 1.0&#215; &#8594; <span class="b-ok">PASS</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- §3 families -->
+<section class="slide">
+  <div class="eyebrow">§3 · Redesign &amp; task design</div>
+  <h2>10 modern families → ~132 tasks</h2>
+  <div class="grid3" style="gap:.9vw 1.3vw">
+    <div class="card"><h3>NSA</h3><span class="small muted">DeepSeek block-sparse (2025)</span></div>
+    <div class="card"><h3>MLA decode</h3><span class="small muted">DeepSeek-V2 absorb</span></div>
+    <div class="card"><h3>MoE top-2/6/8</h3><span class="small muted">Mixtral dispatch</span></div>
+    <div class="card"><h3>W4A16</h3><span class="small muted">packed <b>asymmetric</b> int4</span></div>
+    <div class="card"><h3>W8A8 SmoothQuant</h3><span class="small muted">int8 requant</span></div>
+    <div class="card"><h3>FP8 microscaling</h3><span class="small muted">block-scaled GEMM</span></div>
+    <div class="card"><h3>fused SiLU+FP8</h3><span class="small muted">vLLM deep_gemm</span></div>
+    <div class="card"><h3>fused quant-MoE</h3><span class="small muted">dequant+grouped GEMM</span></div>
+    <div class="card"><h3>multi-LoRA qGEMM</h3><span class="small muted">batched adapters</span></div>
+    <div class="card"><h3>SSM scan</h3><span class="small muted">Mamba selective scan</span></div>
+  </div>
+  <p class="sub">All from <b>real architectures</b> (DeepSeek, Mixtral, Llama, Qwen, Mamba) — well-distributed across the modern stack.</p>
+</section>
+
+<!-- §3 tricky element -->
+<section class="slide">
+  <div class="eyebrow">§3 · Redesign &amp; task design</div>
+  <h2>Difficulty = strong baseline + a tricky numerical contract</h2>
+  <div class="grid2">
+    <div>
+      <p class="lead">Fusion alone isn't hard. The gap is a <b class="accent">small, non-obvious
+      contract</b> the model must get exactly right:</p>
+      <ul>
+        <li>packed <b>asymmetric</b> int4 + zero-points</li>
+        <li>fp8 / int8 block-scaling &amp; requant</li>
+        <li>per-token gather · top-k <b>block selection</b> · MLA absorb</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Difficulty tracks baseline strength</h3>
+      <p class="small">We <b>drop weak-baseline ops</b> (vanilla attention, naive SSM) frontier models
+      clear in one shot, and keep families where <code>torch.compile</code>/cuBLAS leave real fusion
+      headroom.</p>
+    </div>
+  </div>
+</section>
+
+<!-- §3 infra + scale method + oracles -->
+<section class="slide">
+  <div class="eyebrow">§3 · Redesign &amp; task design</div>
+  <h2>Infra, resource budget &amp; how it scales</h2>
+  <div class="grid2">
+    <div>
+      <h3>Workflow</h3>
+      <p class="small"><b>Harbor</b> (agentic env) · <b>Modal</b> (GPU verify, locked L40S) ·
+      <b>OpenRouter</b> (model calls).</p>
+      <h3 style="margin-top:1.4vh">Resource budget</h3>
+      <p class="small"><b>4 turns</b> (AMD's arena uses 5) + a <b>~3 min</b> agent timeout → bounds compute/$ (turns &amp; time).</p>
+    </div>
+    <div>
+      <h3>Scale from one hard task</h3>
+      <p class="small">Hard template → neighbors via <b>parameter grids</b> over real HF configs
+      (model, size, gate/down layer, group size, #experts, dtype). One template → 15–30 tasks.</p>
+      <p class="small accent">quant 24 · moe 20 · fp8/mla/w8a8 18 each · ssm 10 · fused/lora 6–9 · nsa 4</p>
+      <p class="small"><b>Oracles for all 10 families</b> (incl. the hardest) — proof every task is solvable.</p>
+    </div>
+  </div>
+</section>
+
+<!-- §4 RESULTS passk -->
+<section class="slide">
+  <div class="eyebrow">§4 · Model results</div>
+  <h2>pass@1 &amp; pass@2 — 3 frontier models, agentic, 2 samples/task</h2>
+  <table style="width:72%">
+    <tr><th>Model</th><th class="c">pass@1</th><th class="c">pass@2</th></tr>
+    <tr><td><b class="blue">GPT-5.5</b></td><td class="c">40% (8/20)</td><td class="c"><b>50%</b> (5/10)</td></tr>
+    <tr><td><b style="color:#bc8cff">Opus-4.8</b></td><td class="c">25% (5/20)</td><td class="c"><b>40%</b> (4/10)</td></tr>
+    <tr><td><b style="color:#f0883e">Gemini-3.5-flash</b></td><td class="c">5% (1/20)</td><td class="c"><b>10%</b> (1/10)</td></tr>
+  </table>
+  <ul>
+    <li>GPT/Opus squarely in the trial's <b class="accent">10–60% band</b>; clean gradient GPT &gt; Opus &gt; flash.</li>
+    <li>Reproducible from the logs via <code>results/compute_passk.py</code>.</li>
+  </ul>
+</section>
+
+<!-- §4 heatmap -->
+<section class="slide">
+  <div class="eyebrow">§4 · Model results</div>
+  <h2>Per-family difficulty (pass@2) — gradient + hard tail</h2>
+  <table style="font-size:1.12vw">
+    <tr><th>Family</th><th class="c">GPT</th><th class="c">Opus</th><th class="c">flash</th></tr>
+    <tr><td>fp8_microscale</td><td class="c yes">✓</td><td class="c no">✗</td><td class="c yes">✓</td></tr>
+    <tr><td>moe_top2</td><td class="c yes">✓</td><td class="c yes">✓</td><td class="c no">✗</td></tr>
+    <tr><td>ssm_scan</td><td class="c yes">✓</td><td class="c yes">✓</td><td class="c no">✗</td></tr>
+    <tr><td>mla_decode</td><td class="c no">✗</td><td class="c yes">✓</td><td class="c no">✗</td></tr>
+    <tr><td>w8a8_smoothquant</td><td class="c yes">✓</td><td class="c no">✗</td><td class="c no">✗</td></tr>
+    <tr><td>fused_silu_fp8 <span class="muted small">(cosine)</span></td><td class="c no">✗</td><td class="c yes">✓</td><td class="c no">✗</td></tr>
+    <tr><td>nsa_block_sparse <span class="muted small">(n2048)</span></td><td class="c yes">✓</td><td class="c no">✗</td><td class="c no">✗</td></tr>
+    <tr><td>quant_w4a16_pa</td><td class="c no">✗</td><td class="c no">✗</td><td class="c no">✗</td></tr>
+    <tr><td>fused_qmoe</td><td class="c no">✗</td><td class="c no">✗</td><td class="c no">✗</td></tr>
+    <tr><td>multi_lora_qgemm</td><td class="c no">✗</td><td class="c no">✗</td><td class="c no">✗</td></tr>
+  </table>
+  <p class="sub">3 families unsolved by <i>any</i> model = hard tail — yet <b class="accent">all 10 have a passing oracle</b>, so all are provably solvable.</p>
+</section>
+
+<!-- §4 single vs agentic -->
+<section class="slide">
+  <div class="eyebrow">§4 · Model results</div>
+  <h2>Finding: agentic helps strong models, hurts weak ones</h2>
+  <div class="grid2">
+    <div class="card"><h3 class="blue">GPT — iteration repairs</h3>
+      <p class="small">Single-shot ≈ 25% → agentic pass@1 <b>40%</b>; fixes compile errors over turns.
+      <br>e.g. NSA: unsolved single-shot → iterates to a passing <b>1.18×</b> kernel.</p></div>
+    <div class="card"><h3 style="color:#f0883e">flash — the scaffold degrades it</h3>
+      <p class="small">Single-shot ≈ 38% → agentic pass@2 only <b>10%</b>; repeatedly wrote the
+      instruction's <code>&lt;your full python code here&gt;</code> placeholder — no other model did,
+      revealing weaker reasoning.</p></div>
+  </div>
+  <p class="quote">Iterative refinement only helps a model that can drive the terminal and learn from the feedback.</p>
+  <p class="small muted">This single-vs-agentic <b>capability gap</b> is the core motivation — some tasks
+  models fail single-shot but fix after iterations, which sets our benchmark apart from the mostly
+  single-shot prior work.</p>
+</section>
+
+<!-- §5 QC -->
+<section class="slide">
+  <div class="eyebrow">§5 · QC methodology</div>
+  <h2>How I checked task quality: unambiguous, reliable, fair</h2>
+  <ul>
+    <li><b>Unambiguous</b> — pass/fail is fully objective: the output <b>matches the reference</b>
+      <b>and</b> <b>beats <code>torch.compile</code></b>. No judgment calls.</li>
+    <li><b>Reliable verifier</b> — every family ships a known-good <b>oracle that passes</b>, so the
+      verifier provably accepts correct kernels (no false-negatives) and each task is solvable.</li>
+    <li><b>Fair</b> — every model gets the same instructions and turn/time budget, and every task has
+      a verified-correct oracle, so all are solvable. Difficulty comes from the operator, not tricks —
+      the tasks are based on real architectures and systems.</li>
+  </ul>
+  <p class="quote">Difficulty comes from the operator — every task is oracle-verified solvable.</p>
+</section>
+
+<!-- §6 TRAINING SIGNAL -->
+<section class="slide">
+  <div class="eyebrow">§6 · Training-signal value</div>
+  <h2>Why this data is valuable to train on</h2>
+  <ul>
+    <li><b>Dense, verifiable reward</b> — the pass gate is <b>speedup over
+      <code>torch.compile(max-autotune)</code></b> (eager also reported); a continuous speedup is a
+      natural RL reward, far richer than pass/fail.</li>
+    <li><b>Un-gameable</b> — AST anti-cheat + "beat compile" gate; the model must do real work, not call cuBLAS.</li>
+    <li><b>In the right difficulty band</b> — 10–60%: dense learning signal, neither saturated nor impossible.</li>
+    <li><b>In-distribution &amp; real</b> — every task is a real deployment shape (real HF configs).</li>
+    <li><b>Agentic trajectories</b> — multi-turn compile→fix→profile traces are exactly the behavior we want to teach.</li>
+  </ul>
+</section>
+
+<!-- §7 SCALING -->
+<section class="slide">
+  <div class="eyebrow">§7 · Scaling pipeline</div>
+  <h2>From one hard task to 100K</h2>
+  <div class="grid2">
+    <div>
+      <h3>The loop</h3>
+      <p>① <b>Find a hard task</b> — e.g. a fused vLLM kernel; inspired by the takeaways of current
+        benchmarks (what's still unsolved).<br>
+        ② <b>Probe single-shot</b> → confirm it lands in the 10–60% band.<br>
+        ③ <b>Scale the params</b> → a grid of neighbors.<br>
+        ④ <b>Evaluate agentically</b> on Modal.</p>
+      <h3 style="margin-top:1.4vh">Scaling params (real HF configs)</h3>
+      <p>open-source model family · size · layer role (gate / down) · group size · #experts · dtype ·
+        sequence length</p>
+    </div>
+    <div>
+      <h3>Volume vs effort</h3>
+      <table>
+        <tr><th>Scale</th><th>How</th><th>GPU eval</th></tr>
+        <tr><td>100s</td><td>grid over HF configs</td><td>~$30–60</td></tr>
+        <tr><td>1K</td><td>+templates + denser grids</td><td>~$300–600</td></tr>
+        <tr><td>10K</td><td>config mining + auto-filter</td><td>~$3–6K</td></tr>
+        <tr><td>100K</td><td>crawler + LLM-assisted synthesis</td><td>~$30–60K</td></tr>
+      </table>
+      <p class="small muted" style="margin-top:1.2vh">Verifier written once &amp; shared; difficulty
+        inherited by every grid point, estimated by sampling — not exhaustive runs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RELATED WORK -->
+<section class="slide">
+  <div class="eyebrow">Related work · why ours stands out</div>
+  <h2>We occupy the open point of a brand-new frontier</h2>
+  <table style="font-size:1.12vw">
+    <tr><th>Benchmark</th><th>Interaction</th><th>Task</th><th>Baseline</th></tr>
+    <tr><td>KernelBench ('24)</td><td>single-shot</td><td>PyTorch→CUDA/Triton</td><td>eager</td></tr>
+    <tr><td>KernelBench-X ('26)</td><td>single-shot</td><td>→Triton (176 tasks)</td><td>eager</td></tr>
+    <tr><td>Robust-KBench (Sakana '25)</td><td><b>agentic</b></td><td>PyTorch→<b>CUDA</b></td><td>eager</td></tr>
+    <tr><td>AMD AgentKernelArena ('26)</td><td><b>agentic</b> (5-turn)</td><td><b>Triton→Triton</b></td><td>given kernel</td></tr>
+    <tr style="background:#10241a"><td><b>Ours</b></td><td><b>agentic</b> (4-turn)</td><td><b>PyTorch→Triton</b></td><td><b>torch.compile</b></td></tr>
+  </table>
+  <ul style="margin-top:1vh">
+    <li>Agentic kernel-gen is a <b>2025–26 frontier</b>; only Robust-KBench (→CUDA) &amp; AMD (→Triton-from-Triton) exist.</li>
+    <li><b>Only we</b>: agentic <b>pytorch→Triton from scratch</b> · beat <b>torch.compile</b> · modern SOTA ops · <b>oracle-proven solvable</b>.</li>
+  </ul>
+</section>
+
+<!-- REFERENCES -->
+<section class="slide">
+  <div class="eyebrow">References</div>
+  <h2>References &amp; inspirations</h2>
+  <table style="font-size:1.12vw">
+    <tr><th>Work</th><th>Paper</th><th>Code</th></tr>
+    <tr><td>KernelBench (Stanford)</td><td>arXiv:2502.10517</td><td>github.com/ScalingIntelligence/KernelBench</td></tr>
+    <tr><td>Robust-KBench (Sakana AI)</td><td>arXiv:2509.14279</td><td>github.com/SakanaAI/robust-kbench</td></tr>
+    <tr><td>KernelBench-X</td><td>arXiv:2605.04956 (May '26)</td><td>github.com/BonnieW05/KernelBenchX</td></tr>
+    <tr><td>AMD AgentKernelArena</td><td><b>arXiv:2605.16819</b> (May '26)</td><td>github.com/AMD-AGI/AgentKernelArena</td></tr>
+    <tr><td>Survey — Automated GPU kernels</td><td colspan="2">simonguo.tech/blog/2025-10-automated-gpu-kernels.html</td></tr>
+  </table>
+  <p class="sub"><b>Inspirations:</b> vLLM golden kernels (deep_gemm→fused_silu, fused_moe→fused_qmoe) · DeepSeek NSA / MLA · quantization as a hard-task family.</p>
+</section>
+
+<!-- FUTURE / THANKS -->
+<section class="slide center">
+  <div class="eyebrow">Future work</div>
+  <h2 style="border:none">Takeaways &amp; what's next</h2>
+  <div class="grid2" style="max-width:70vw;text-align:left">
+    <div>
+      <h3>Takeaways</h3>
+      <ul class="small">
+        <li>A <b>harder, fairer, agentic</b> KernelBench: beat <code>torch.compile</code> on modern kernels, un-gameable.</li>
+        <li>Frontier models in the <b>10–60%</b> band; <b>10/10 families proven solvable</b> by oracles.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Future work</h3>
+      <ul class="small">
+        <li>① <b>Extend to more modern, complex architectures</b> (more 2025 ops, longer context, larger turn budgets).</li>
+        <li>② <b>Train with it</b> — use the speedup-over-<code>torch.compile</code> as a dense <b>RL reward</b>.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="quote" style="text-align:center;border:none">Thank you! I really enjoyed doing this, and would love more time to extend it to other modern architectures.</p>
+</section>
+
+</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  let i=0;
+  function show(n){i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));}
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')show(i+1);
+    else if(e.key==='ArrowLeft'||e.key==='PageUp')show(i-1);
+    else if(e.key==='Home')show(0); else if(e.key==='End')show(slides.length-1);
+    else if(e.key.toLowerCase()==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}});
+  document.addEventListener('click',e=>{if(e.clientX>window.innerWidth*0.5)show(i+1);else show(i-1);});
+  show(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "timestamp": "20260629-211312",
+  "model": "google/gemini-3.5-flash",
+  "task": "moe_topk",
+  "samples": 2,
+  "n_pass": 0,
+  "pass_at_1": 0.0,
+  "records": [
+    {
+      "sample": 0,
+      "static_ok": true,
+      "correct": false,
+      "max_err": null,
+      "speedup_vs_compile": null,
+      "speedup_vs_eager": null,
+      "pass": false,
+      "error": "SyntaxError: invalid decimal literal (kb_gen.py, line 3)\nTraceback (most recent call last):\n  File \"/root/measure_pass1.py\", line 361, in evaluate\n    genmod = load_module(gen_src, \"kb_gen\")\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/measure_pass1.py\", line 332, in load_module\n    spec.loader.exec_module(mod)\n  File \"<frozen importlib._bootstrap_external>\", line 936, in exec_module\n  File \"<frozen importlib._bootstrap_external>\", line 1074, in get_code\n  File \"<frozen importlib._bootstrap_external>\", line 1004, in source_to_code\n  File \"<frozen importlib._bootstrap>\", line 241, in _call_with_frames_removed\n  File \"/tmp/kb_gen.py\", line 3\n    Rather than computing the dense matrix multiplication for all experts (which does unnecessary computation for inactive experts), this implementation groups the active tokens by their routed expert using fast GPU sorting, and then executes a **Grouped GEMM** via a custom Triton kernel. This reduces the computational complexity by **4x** (from 8 experts to 2 experts per token) and achieves maximum memory and tensor core efficiency.\n                                                                                                                                                                                                                                                                                                                                                 ^\nSyntaxError: invalid decimal literal\n"
+    },
+    {
+      "sample": 1,
+      "static_ok": true,
+      "correct": false,
+      "max_err": null,
+      "speedup_vs_compile": null,
+      "speedup_vs_eager": null,
+      "pass": false,
+      "error": "CompilationError: at 52:33:\n        w1_ptr = W_ptr + e1 * stride_we + offs_d[:, None] * stride_wd + offs_h[None, :] * stride_wh\n        w1_val = tl.load(w1_ptr, mask=(mask_d[:, None] & mask_h[None, :]), other=0.0).to(tl.float32)\n\n        # Elementwise-multiply and reduce along the D dimension\n        acc0 += tl.sum(x_val[:, None] * w0_val, axis=0)\n        acc1 += tl.sum(x_val[:, None] * w1_val, axis=0)\n\n    out_val = v0 * acc0 + v1 * acc1\n\n    # Store result\n    out_ptr = Out_ptr + pid_t * stride_out_t + offs_h * stride_out_h\n    tl.store(out_ptr, out_val.to(X_ptr.dtype_element), mask=mask_h)\n                                 ^\nAttributeError(\"'tensor' object has no attribute 'dtype_element'\")\n   fn()\n  File \"/usr/local/lib/python3.11/site-packages/triton/runtime/autotuner.py\", line 114, in kernel_call\n    self.fn.run(\n  File \"/usr/local/lib/python3.11/site-packages/triton/runtime/jit.py\", line 662, in run\n    kernel = self.compile(\n             ^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 276, in compile\n    module = src.make_ir(options, codegen_fns, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 113, in make_ir\n    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntriton.compiler.errors.CompilationError: at 52:33:\n        w1_ptr = W_ptr + e1 * stride_we + offs_d[:, None] * stride_wd + offs_h[None, :] * stride_wh\n        w1_val = tl.load(w1_ptr, mask=(mask_d[:, None] & mask_h[None, :]), other=0.0).to(tl.float32)\n\n        # Elementwise-multiply and reduce along the D dimension\n        acc0 += tl.sum(x_val[:, None] * w0_val, axis=0)\n        acc1 += tl.sum(x_val[:, None] * w1_val, axis=0)\n\n    out_val = v0 * acc0 + v1 * acc1\n\n    # Store result\n    out_ptr = Out_ptr + pid_t * stride_out_t + offs_h * stride_out_h\n    tl.store(out_ptr, out_val.to(X_ptr.dtype_element), mask=mask_h)\n                                 ^\nAttributeError(\"'tensor' object has no attribute 'dtype_element'\")\n"
+    }
+  ]
+}

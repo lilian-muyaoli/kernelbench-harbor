@@ -1,0 +1,30 @@
+{
+  "timestamp": "20260630-032211",
+  "model": "openai/gpt-5.5",
+  "task": "nsa_block_sparse_attn",
+  "samples": 2,
+  "n_pass": 0,
+  "pass_at_1": 0.0,
+  "records": [
+    {
+      "sample": 0,
+      "static_ok": false,
+      "correct": null,
+      "max_err": null,
+      "speedup_vs_compile": null,
+      "speedup_vs_eager": null,
+      "pass": false,
+      "error": "gen: 'NoneType' object is not subscriptable"
+    },
+    {
+      "sample": 1,
+      "static_ok": false,
+      "correct": null,
+      "max_err": null,
+      "speedup_vs_compile": null,
+      "speedup_vs_eager": null,
+      "pass": false,
+      "error": "gen: 'NoneType' object is not subscriptable"
+    }
+  ]
+}

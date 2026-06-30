@@ -1,0 +1,30 @@
+{
+  "timestamp": "20260629-223625",
+  "model": "openai/gpt-5.5",
+  "task": "gated_deltanet",
+  "samples": 2,
+  "n_pass": 2,
+  "pass_at_1": 1.0,
+  "records": [
+    {
+      "sample": 0,
+      "static_ok": true,
+      "correct": true,
+      "max_err": 0.000957489013671875,
+      "speedup_vs_compile": 13.389189405607741,
+      "speedup_vs_eager": 340.13008468506865,
+      "pass": true,
+      "error": null
+    },
+    {
+      "sample": 1,
+      "static_ok": true,
+      "correct": true,
+      "max_err": 0.0009746551513671875,
+      "speedup_vs_compile": 11.960591407029678,
+      "speedup_vs_eager": 161.52709831804236,
+      "pass": true,
+      "error": null
+    }
+  ]
+}

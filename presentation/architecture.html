@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KernelBench-Harbor — Agentic Verifier Architecture</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel-nested:#1c2230; --ink:#e6edf3; --muted:#8b949e;
+    --accent:#3fb950; --accent2:#58a6ff; --bad:#f85149; --warn:#d29922; --line:#30363d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:48px 24px;min-height:100vh;color:var(--ink);
+    background:radial-gradient(1200px 600px at 25% -10%, #1a2434 0%, #0d1117 55%);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .page-header{text-align:center;margin-bottom:40px}
+  .page-header h1{font-size:2.1rem;margin:0 0 8px;color:#fff;font-weight:700;letter-spacing:-.02em}
+  .page-header p{color:var(--muted);font-size:1.05rem;margin:0}
+  .page-header .hl{color:var(--accent2);font-weight:600}
+  .diagram{display:flex;justify-content:center;align-items:stretch;gap:16px;max-width:1380px;margin:0 auto}
+  .col{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px;
+    box-shadow:0 8px 24px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:18px;min-width:320px}
+  .col-title{font-size:1.15rem;font-weight:700;color:#fff;border-bottom:1px solid var(--line);
+    padding-bottom:12px;margin:0;display:flex;align-items:center;justify-content:space-between}
+  .step-badge{font-size:.72rem;background:var(--line);color:var(--muted);padding:2px 8px;border-radius:20px;text-transform:uppercase}
+  .card{background:var(--panel-nested);border:1px solid var(--line);border-radius:8px;padding:15px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+  .card-title{font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
+    margin:0 0 9px;font-weight:700}
+  .card-content{font-size:.9rem;line-height:1.5;color:#c9d1d9}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.82rem;
+    background:#0d1117;padding:2px 6px;border-radius:4px;color:#ff7b72}
+  pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.8rem;background:#0d1117;
+    border:1px solid var(--line);border-radius:6px;padding:12px;margin:8px 0 0;overflow-x:auto;
+    color:#e6edf3;line-height:1.45}
+  .keyword{color:#ff7b72}.class-name{color:#f0883e}.comment{color:#8b949e}.decorator{color:#d29922}
+  .connector{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1.8rem}
+  .loop-box{border:2px dashed rgba(210,153,34,.45);border-radius:10px;padding:18px 16px;display:flex;
+    flex-direction:column;gap:12px;background:rgba(210,153,34,.03);position:relative}
+  .loop-badge{position:absolute;top:-11px;right:16px;background:var(--warn);color:var(--bg);font-size:.7rem;
+    font-weight:800;padding:1px 9px;border-radius:12px;text-transform:uppercase;letter-spacing:.05em}
+  .inner-arrow{text-align:center;color:var(--muted);font-size:1.05rem}
+  .feedback{display:flex;flex-direction:column;gap:6px;background:#0d1117;padding:10px;border-radius:6px;border:1px solid var(--line)}
+  .channel{font-size:.78rem;display:flex;align-items:center;gap:8px;color:var(--muted)}
+  .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .dot-bad{background:var(--bad);box-shadow:0 0 6px var(--bad)} .dot-warn{background:var(--warn);box-shadow:0 0 6px var(--warn)}
+  .dot-blue{background:var(--accent2);box-shadow:0 0 6px var(--accent2)}
+  .badges{display:flex;gap:8px;margin-top:10px}
+  .badge{font-size:.75rem;font-weight:700;padding:2px 7px;border-radius:4px}
+  .badge.ok{background:rgba(63,185,80,.15);color:var(--accent);border:1px solid rgba(63,185,80,.3)}
+  .badge.no{background:rgba(248,81,73,.15);color:var(--bad);border:1px solid rgba(248,81,73,.3)}
+  .vs{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;font-size:.8rem;
+    background:#0d1117;padding:8px;border-radius:6px;border:1px solid var(--line)}
+  .vs-badge{background:var(--bad);color:#fff;padding:1px 5px;border-radius:3px;font-size:.7rem;font-weight:bold}
+  @media (max-width:1100px){.diagram{flex-direction:column;align-items:center}
+    .connector{transform:rotate(90deg);margin:8px 0}.col{width:100%;max-width:520px}}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>KernelBench-Harbor</h1>
+  <p>Agentic verifier pipeline: <span class="hl">PyTorch &#8594; Triton</span>, iterate, then grade on correctness &amp; speedup</p>
+</div>
+
+<div class="diagram">
+
+  <!-- INPUT -->
+  <div class="col">
+    <div class="col-title"><span>Input</span><span class="step-badge">Phase 1</span></div>
+    <div class="card">
+      <div class="card-title">Task instruction</div>
+      <div class="card-content">Given a naive PyTorch reference <code>Model</code>, write an optimized
+        <code>ModelNew</code> with a real <code>@triton.jit</code> kernel. It must be <strong>numerically
+        correct</strong> <em>and</em> <strong>faster than <code>torch.compile(max-autotune)</code></strong>.
+        An AST anti-cheat forbids offloading the core compute.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">reference.py — the "question"</div>
+      <pre><span class="keyword">class</span> <span class="class-name">Model</span>(nn.Module):
+    <span class="keyword">def</span> <span class="class-name">forward</span>(self, x, ...):
+        <span class="comment"># a modern SOTA operator:</span>
+        <span class="comment"># NSA / MLA / MoE / quant / fused</span>
+        ...
+
+<span class="keyword">def</span> <span class="class-name">get_inputs</span>():
+    <span class="comment"># real HuggingFace shapes</span>
+    ...</pre>
+    </div>
+  </div>
+
+  <div class="connector">&#8594;</div>
+
+  <!-- AGENTIC LOOP -->
+  <div class="col" style="border-color:rgba(210,153,34,.3)">
+    <div class="col-title" style="color:var(--warn)"><span>Agentic refinement</span>
+      <span class="step-badge" style="background:rgba(210,153,34,.15);color:var(--warn)">Phase 2</span></div>
+    <div class="loop-box">
+      <div class="loop-badge">iterate up to 4 turns</div>
+      <div class="card" style="background:#1a202c;border-color:var(--accent2)">
+        <div class="card-title" style="color:var(--accent2)">Language model (agent)</div>
+        <div class="card-content">Reads the container feedback and fixes compile errors, numeric
+          mismatches, and slow kernels — turn by turn.</div>
+      </div>
+      <div class="inner-arrow">&#9660;</div>
+      <div class="card">
+        <div class="card-title">Generated code (PyTorch + Triton)</div>
+        <pre><span class="decorator">@triton.jit</span>
+<span class="keyword">def</span> <span class="class-name">kernel</span>(...):
+    <span class="comment"># the real Triton compute</span>
+
+<span class="keyword">class</span> <span class="class-name">ModelNew</span>(nn.Module):
+    ...</pre>
+      </div>
+      <div class="inner-arrow">&#9660; &#9650;</div>
+      <div class="card" style="background:#161b22">
+        <div class="card-title" style="color:var(--warn)">Harbor sandbox &middot; Modal L40S</div>
+        <div class="feedback">
+          <div class="channel"><span class="dot dot-bad"></span>Compile &amp; linker errors</div>
+          <div class="channel"><span class="dot dot-warn"></span>Output-mismatch logs</div>
+          <div class="channel"><span class="dot dot-blue"></span>Performance profiles</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="connector">&#8594;</div>
+
+  <!-- VERIFIER -->
+  <div class="col" style="border-color:rgba(63,185,80,.3)">
+    <div class="col-title" style="color:var(--accent)"><span>Verifier</span>
+      <span class="step-badge" style="background:rgba(63,185,80,.15);color:var(--accent)">Phase 3</span></div>
+
+    <div class="card">
+      <div class="card-title">&#9312; AST anti-cheat</div>
+      <div class="card-content">Static analysis: require a real <code>@triton.jit</code>; reject offloading
+        core compute. Flags only real calls, not mentions in comments.
+        <div class="vs"><span>banned</span><span>&#8594;</span><code>matmul / softmax / sdpa / cuBLAS</code></div>
+        <div class="badges"><span class="badge ok">&#10003; real Triton</span><span class="badge no">&#10007; offloaded</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">&#9313; Correctness</div>
+      <div class="card-content">Compare against an <strong>fp32 ground truth</strong> over several random
+        draws, with dtype-aware tolerance (cosine/relative for discrete-output families).
+        <div class="vs"><code>Model.forward</code><span>&#8596;</span><code>ModelNew.forward</code></div>
+        <div class="badges"><span class="badge ok">&#10003; match</span><span class="badge no">&#10007; mismatch</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="color:#fff">&#9314; Performance gate</div>
+      <div class="card-content">Median runtime vs the compiler; correct-but-slow does not pass
+        (eager speedup also reported).
+        <div class="vs" style="border-color:var(--accent2)"><span>Triton time</span>
+          <span class="vs-badge">VS</span><code>torch.compile(max-autotune)</code></div>
+        <div class="badges" style="margin-top:12px"><span class="badge ok" style="background:var(--accent);color:#fff">&#10003; speedup &#8805; 1.0&#215; &#8594; PASS</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

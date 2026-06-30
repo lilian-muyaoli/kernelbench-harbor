@@ -1,0 +1,22 @@
+schema_version = "1.3"
+
+[task]
+name = "kernelbench-harbor/w8a8_smoothquant__llama3_8b_gate__M16"
+description = "W8A8 SmoothQuant GEMM, llama3_8b_gate (K=4096,N=14336), M=16."
+authors = [{ name = "AfterQuery trial", email = "muyaosh18@gmail.com" }]
+keywords = ["gpu", "triton", "quantization", "int8", "performance"]
+
+[environment]
+os = "linux"
+cpus = 4
+memory_mb = 16384
+gpus = 1
+gpu_types = ["L40S"]
+network_mode = "public"
+build_timeout_sec = 1800.0
+
+[agent]
+timeout_sec = 1200.0
+
+[verifier]
+timeout_sec = 1200.0

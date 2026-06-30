@@ -1,0 +1,11 @@
+{
+  "reward": 0,
+  "correct": false,
+  "speedup_vs_compile": null,
+  "speedup_vs_eager": null,
+  "max_err": null,
+  "static_ok": true,
+  "compile_ok": null,
+  "suspicious": false,
+  "error": "CompilationError: at 8:26:\ndef _fp8_block_scaled_gemm_kernel(x_ptr, w_ptr, s_ptr, y_ptr,\n                                  M:tl.constexpr, K:tl.constexpr, N:tl.constexpr,\n                                  BLOCK_N:tl.constexpr):\n    pid_n = tl.program_id(0)\n\n    offs_m = tl.arange(0, 16)\n    offs_n = pid_n * BLOCK_N + tl.arange(0, BLOCK_N)\n    offs_k = tl.arange(0, BLOCK)\n                          ^\nNameError(\"Cannot access global variable BLOCK from within @jit'ed function. Triton kernels can only access global variables that are annotated as constexpr (`x: triton.language.constexpr = 42` or `x = triton.language.constexpr(42)`).  Alternatively, set the envvar TRITON_ALLOW_NON_CONSTEXPR_GLOBALS=1, but we do not promise to support this forever.\")\n 276, in compile\n    module = src.make_ir(options, codegen_fns, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/conda/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 113, in make_ir\n    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntriton.compiler.errors.CompilationError: at 8:26:\ndef _fp8_block_scaled_gemm_kernel(x_ptr, w_ptr, s_ptr, y_ptr,\n                                  M:tl.constexpr, K:tl.constexpr, N:tl.constexpr,\n                                  BLOCK_N:tl.constexpr):\n    pid_n = tl.program_id(0)\n\n    offs_m = tl.arange(0, 16)\n    offs_n = pid_n * BLOCK_N + tl.arange(0, BLOCK_N)\n    offs_k = tl.arange(0, BLOCK)\n                          ^\nNameError(\"Cannot access global variable BLOCK from within @jit'ed function. Triton kernels can only access global variables that are annotated as constexpr (`x: triton.language.constexpr = 42` or `x = triton.language.constexpr(42)`).  Alternatively, set the envvar TRITON_ALLOW_NON_CONSTEXPR_GLOBALS=1, but we do not promise to support this forever.\")\n"
+}

@@ -1,0 +1,30 @@
+{
+  "timestamp": "20260630-013438",
+  "model": "openai/gpt-5.5",
+  "task": "fused_quant_moe",
+  "samples": 2,
+  "n_pass": 0,
+  "pass_at_1": 0.0,
+  "records": [
+    {
+      "sample": 0,
+      "static_ok": true,
+      "correct": false,
+      "max_err": null,
+      "speedup_vs_compile": null,
+      "speedup_vs_eager": null,
+      "pass": false,
+      "error": "CompilationError: at 24:27:\n):\n    pid_t = tl.program_id(0)\n    pid_e = tl.program_id(1)\n    pid_n = tl.program_id(2)\n\n    offs_t = pid_t * BM + tl.arange(0, BM)\n    offs_n = pid_n * BN + tl.arange(0, BN)\n    offs_k = tl.arange(0, BK)\n\n    acc = tl.zeros((BM, BN), tl.float32)\n\n    for g in range(0, D // GROUP):\n                           ^\nNameError(\"Cannot access global variable GROUP from within @jit'ed function. Triton kernels can only access global variables that are annotated as constexpr (`x: triton.language.constexpr = 42` or `x = triton.language.constexpr(42)`).  Alternatively, set the envvar TRITON_ALLOW_NON_CONSTEXPR_GLOBALS=1, but we do not promise to support this forever.\")\nlf.run(grid=grid, warmup=False, *args, **kwargs)\n                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/runtime/jit.py\", line 662, in run\n    kernel = self.compile(\n             ^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 276, in compile\n    module = src.make_ir(options, codegen_fns, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 113, in make_ir\n    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntriton.compiler.errors.CompilationError: at 24:27:\n):\n    pid_t = tl.program_id(0)\n    pid_e = tl.program_id(1)\n    pid_n = tl.program_id(2)\n\n    offs_t = pid_t * BM + tl.arange(0, BM)\n    offs_n = pid_n * BN + tl.arange(0, BN)\n    offs_k = tl.arange(0, BK)\n\n    acc = tl.zeros((BM, BN), tl.float32)\n\n    for g in range(0, D // GROUP):\n                           ^\nNameError(\"Cannot access global variable GROUP from within @jit'ed function. Triton kernels can only access global variables that are annotated as constexpr (`x: triton.language.constexpr = 42` or `x = triton.language.constexpr(42)`).  Alternatively, set the envvar TRITON_ALLOW_NON_CONSTEXPR_GLOBALS=1, but we do not promise to support this forever.\")\n"
+    },
+    {
+      "sample": 1,
+      "static_ok": true,
+      "correct": true,
+      "max_err": 0.007978439331054688,
+      "speedup_vs_compile": 0.44010416745615855,
+      "speedup_vs_eager": 0.8723957757004246,
+      "pass": false,
+      "error": null
+    }
+  ]
+}

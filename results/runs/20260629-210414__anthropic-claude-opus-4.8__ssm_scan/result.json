@@ -1,0 +1,30 @@
+{
+  "timestamp": "20260629-210414",
+  "model": "anthropic/claude-opus-4.8",
+  "task": "ssm_scan",
+  "samples": 2,
+  "n_pass": 1,
+  "pass_at_1": 0.5,
+  "records": [
+    {
+      "sample": 0,
+      "static_ok": true,
+      "correct": false,
+      "max_err": 23.68453598022461,
+      "speedup_vs_compile": 1.5966666220407955,
+      "speedup_vs_eager": 82.19666388628086,
+      "pass": false,
+      "error": null
+    },
+    {
+      "sample": 1,
+      "static_ok": true,
+      "correct": true,
+      "max_err": 0.02947998046875,
+      "speedup_vs_compile": 73.91642283158212,
+      "speedup_vs_eager": 73.91642283158212,
+      "pass": true,
+      "error": null
+    }
+  ]
+}

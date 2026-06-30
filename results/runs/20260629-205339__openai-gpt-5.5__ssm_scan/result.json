@@ -1,0 +1,30 @@
+{
+  "timestamp": "20260629-205339",
+  "model": "openai/gpt-5.5",
+  "task": "ssm_scan",
+  "samples": 2,
+  "n_pass": 1,
+  "pass_at_1": 0.5,
+  "records": [
+    {
+      "sample": 0,
+      "static_ok": true,
+      "correct": true,
+      "max_err": 0.0402984619140625,
+      "speedup_vs_compile": 5.07214080804306,
+      "speedup_vs_eager": 257.3616926415766,
+      "pass": true,
+      "error": null
+    },
+    {
+      "sample": 1,
+      "static_ok": true,
+      "correct": false,
+      "max_err": 0.05590057373046875,
+      "speedup_vs_compile": 241.46317925928446,
+      "speedup_vs_eager": 241.46317925928446,
+      "pass": false,
+      "error": null
+    }
+  ]
+}

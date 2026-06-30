@@ -1,0 +1,11 @@
+{
+  "reward": 0,
+  "correct": false,
+  "speedup_vs_compile": null,
+  "speedup_vs_eager": null,
+  "max_err": null,
+  "static_ok": true,
+  "compile_ok": null,
+  "suspicious": false,
+  "error": "RuntimeError: Float did not match Half\nTraceback (most recent call last):\n  File \"/app/kb_verifier.py\", line 203, in grade\n    if not is_correct(y, gt):\n           ^^^^^^^^^^^^^^^^^\n  File \"/app/kb_verifier.py\", line 177, in is_correct\n    return torch.allclose(y.float(), gt, atol=atol, rtol=rtol)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Float did not match Half\n"
+}

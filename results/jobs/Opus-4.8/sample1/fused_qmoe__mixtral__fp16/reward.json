@@ -1,0 +1,11 @@
+{
+  "reward": 0,
+  "correct": false,
+  "speedup_vs_compile": null,
+  "speedup_vs_eager": null,
+  "max_err": null,
+  "static_ok": false,
+  "compile_ok": null,
+  "suspicious": false,
+  "error": "static check failed: banned op (offloads core compute): torch.softmax"
+}

@@ -1,0 +1,22 @@
+schema_version = "1.3"
+
+[task]
+name = "kernelbench-harbor/nsa_block_sparse__n4096_h8"
+description = "Native Sparse Attention (block top-k), n4096_h8 (B=2,H=8,N=4096,D=64,BS=64,TOPB=4)."
+authors = [{ name = "AfterQuery trial", email = "muyaosh18@gmail.com" }]
+keywords = ["gpu", "triton", "attention", "sparse", "nsa", "performance"]
+
+[environment]
+os = "linux"
+cpus = 4
+memory_mb = 16384
+gpus = 1
+gpu_types = ["L40S"]
+network_mode = "public"
+build_timeout_sec = 1800.0
+
+[agent]
+timeout_sec = 1200.0
+
+[verifier]
+timeout_sec = 1200.0

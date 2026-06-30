@@ -1,0 +1,30 @@
+{
+  "timestamp": "20260629-203410",
+  "model": "openai/gpt-5.5",
+  "task": "quant_w4a16_packed_asym_llama3_8b_down",
+  "samples": 2,
+  "n_pass": 0,
+  "pass_at_1": 0.0,
+  "records": [
+    {
+      "sample": 0,
+      "static_ok": true,
+      "correct": false,
+      "max_err": null,
+      "speedup_vs_compile": null,
+      "speedup_vs_eager": null,
+      "pass": false,
+      "error": "CompilationError: at 53:18:\n            other=0.0,\n        )\n\n        q_vals = tl.load(\n            qweight_ptr + offs_k[:, None] * sqk + word_cols[None, :] * sqp,\n            mask=(offs_k[:, None] < K) & (offs_n[None, :] < N),\n            other=0,\n        )\n\n        nibbles = ((q_vals >> shifts[None, :]) & 15).to(tl.float32)\n\n        g = k0 // GROUP\n                  ^\nNameError(\"Cannot access global variable GROUP from within @jit'ed function. Triton kernels can only access global variables that are annotated as constexpr (`x: triton.language.constexpr = 42` or `x = triton.language.constexpr(42)`).  Alternatively, set the envvar TRITON_ALLOW_NON_CONSTEXPR_GLOBALS=1, but we do not promise to support this forever.\")\n *args, **kwargs)\n                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/runtime/jit.py\", line 662, in run\n    kernel = self.compile(\n             ^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 276, in compile\n    module = src.make_ir(options, codegen_fns, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 113, in make_ir\n    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntriton.compiler.errors.CompilationError: at 53:18:\n            other=0.0,\n        )\n\n        q_vals = tl.load(\n            qweight_ptr + offs_k[:, None] * sqk + word_cols[None, :] * sqp,\n            mask=(offs_k[:, None] < K) & (offs_n[None, :] < N),\n            other=0,\n        )\n\n        nibbles = ((q_vals >> shifts[None, :]) & 15).to(tl.float32)\n\n        g = k0 // GROUP\n                  ^\nNameError(\"Cannot access global variable GROUP from within @jit'ed function. Triton kernels can only access global variables that are annotated as constexpr (`x: triton.language.constexpr = 42` or `x = triton.language.constexpr(42)`).  Alternatively, set the envvar TRITON_ALLOW_NON_CONSTEXPR_GLOBALS=1, but we do not promise to support this forever.\")\n"
+    },
+    {
+      "sample": 1,
+      "static_ok": true,
+      "correct": false,
+      "max_err": null,
+      "speedup_vs_compile": null,
+      "speedup_vs_eager": null,
+      "pass": false,
+      "error": "CompilationError: at 53:25:\n            other=0.0,\n        )\n\n        packed = tl.load(\n            qweight_ptr + offs_k[:, None] * sqk + pack_n[None, :] * sqp,\n            mask=(offs_k[:, None] < K) & (offs_n[None, :] < N),\n            other=0,\n        )\n\n        q = ((packed >> shifts[None, :]) & 0xF).to(tl.float32)\n\n        group_id = k0 // GROUP\n                         ^\nNameError(\"Cannot access global variable GROUP from within @jit'ed function. Triton kernels can only access global variables that are annotated as constexpr (`x: triton.language.constexpr = 42` or `x = triton.language.constexpr(42)`).  Alternatively, set the envvar TRITON_ALLOW_NON_CONSTEXPR_GLOBALS=1, but we do not promise to support this forever.\")\n, **kwargs)\n                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/runtime/jit.py\", line 662, in run\n    kernel = self.compile(\n             ^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 276, in compile\n    module = src.make_ir(options, codegen_fns, context)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/triton/compiler/compiler.py\", line 113, in make_ir\n    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntriton.compiler.errors.CompilationError: at 53:25:\n            other=0.0,\n        )\n\n        packed = tl.load(\n            qweight_ptr + offs_k[:, None] * sqk + pack_n[None, :] * sqp,\n            mask=(offs_k[:, None] < K) & (offs_n[None, :] < N),\n            other=0,\n        )\n\n        q = ((packed >> shifts[None, :]) & 0xF).to(tl.float32)\n\n        group_id = k0 // GROUP\n                         ^\nNameError(\"Cannot access global variable GROUP from within @jit'ed function. Triton kernels can only access global variables that are annotated as constexpr (`x: triton.language.constexpr = 42` or `x = triton.language.constexpr(42)`).  Alternatively, set the envvar TRITON_ALLOW_NON_CONSTEXPR_GLOBALS=1, but we do not promise to support this forever.\")\n"
+    }
+  ]
+}

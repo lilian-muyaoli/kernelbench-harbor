@@ -1,0 +1,22 @@
+schema_version = "1.3"
+
+[task]
+name = "kernelbench-harbor/fused_qmoe__mixtral__fp16"
+description = "Fused quantized top-2 MoE, mixtral (D=4096,E=8,N=14336), fp16."
+authors = [{ name = "AfterQuery trial", email = "muyaosh18@gmail.com" }]
+keywords = ["gpu", "triton", "fused", "moe", "quantization", "performance"]
+
+[environment]
+os = "linux"
+cpus = 4
+memory_mb = 16384
+gpus = 1
+gpu_types = ["L40S"]
+network_mode = "public"
+build_timeout_sec = 1800.0
+
+[agent]
+timeout_sec = 1200.0
+
+[verifier]
+timeout_sec = 1200.0

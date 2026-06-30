@@ -1,0 +1,39 @@
+✓ Initialized. View run at 
+https://modal.com/apps/jellyrose842/main/ap-jHTiO30GSxtbCr41VXkxA6
+✓ Created objects.
+├── 🔨 Created mount 
+│   /Users/lilianli/Downloads/bench/kernelbench-harbor/validate/measure_pass1.py
+└── 🔨 Created function evaluate.
+
+===== sample 1/2  model=openai/gpt-5.5  task=ssm_scan =====
+static_check: True (ok)  | gen 3448 chars
+  correct=True  max_err=0.04787445068359375  vs_compile=5.341703035864223  vs_eager=169.86462846651196  PASS=True
+
+===== sample 2/2  model=openai/gpt-5.5  task=ssm_scan =====
+static_check: True (ok)  | gen 2774 chars
+  correct=False  max_err=None  vs_compile=None  vs_eager=None  PASS=False
+  error: CompilationError: at 57:13:
+            mask=mask_s,
+            other=0.0,
+        ).to(tl.float32)
+
+        C = tl.load(
+            C_ptr + pid_b * C_s0 + t * C_s1 + offs_s * C_s2,
+            mask=mask_s,
+            other=0.0,
+        ).to(tl.float32)
+
+        x = (delta[:, None] * A).to(tl.float16)
+        dA = tl.exp(x).to(tl.float16).to(tl.float32)
+             ^
+odule.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/kb_gen.py", line 95, in forward
+    _s6_scan_kernel[grid](
+  File "/usr/local/lib/python3.11/si
+
+==== pass@1 over 2 samples: 1/2 ====
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/jellyrose842/main/ap-jHTiO30GSxtbCr41VXkxA6

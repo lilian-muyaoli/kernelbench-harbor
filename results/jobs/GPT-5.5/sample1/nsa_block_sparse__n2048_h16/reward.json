@@ -1,0 +1,11 @@
+{
+  "reward": 1,
+  "correct": true,
+  "speedup_vs_compile": 1.1831601160581156,
+  "speedup_vs_eager": 3.784713705601339,
+  "max_err": 0.6414824724197388,
+  "static_ok": true,
+  "compile_ok": true,
+  "suspicious": false,
+  "error": null
+}
