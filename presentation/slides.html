@@ -389,7 +389,7 @@
       <h3>The loop</h3>
       <p>① <b>Find a hard task</b> — e.g. a fused vLLM kernel; inspired by the takeaways of current
         benchmarks (what's still unsolved).<br>
-        ② <b>Probe single-shot</b> → confirm it lands in the 10–60% band.<br>
+        ② <b>Probe single-shot</b> → confirm it's hard enough that some attempts fail (not trivially solved).<br>
         ③ <b>Scale the params</b> → a grid of neighbors.<br>
         ④ <b>Evaluate agentically</b> on Modal.</p>
       <h3 style="margin-top:1.4vh">Scaling params (real HF configs)</h3>
@@ -402,7 +402,7 @@
         <tr><th>Scale</th><th>How</th><th>GPU eval</th></tr>
         <tr><td>100s</td><td>grid over HF configs</td><td>~$30–60</td></tr>
         <tr><td>1K</td><td>+templates + denser grids</td><td>~$300–600</td></tr>
-        <tr><td>10K</td><td>config mining + auto-filter</td><td>~$3–6K</td></tr>
+        <tr><td>10K</td><td>mine real HF model configs + auto-filter</td><td>~$3–6K</td></tr>
         <tr><td>100K</td><td>crawler + LLM-assisted synthesis</td><td>~$30–60K</td></tr>
       </table>
       <p class="small muted" style="margin-top:1.2vh">Verifier written once &amp; shared; difficulty
@@ -424,8 +424,8 @@
     <tr style="background:#10241a"><td><b>Ours</b></td><td><b>agentic</b> (4-turn)</td><td><b>PyTorch→Triton</b></td><td><b>torch.compile</b></td></tr>
   </table>
   <ul style="margin-top:1vh">
-    <li>Agentic kernel-gen is a <b>2025–26 frontier</b>; only Robust-KBench (→CUDA) &amp; AMD (→Triton-from-Triton) exist.</li>
-    <li><b>Only we</b>: agentic <b>pytorch→Triton from scratch</b> · beat <b>torch.compile</b> · modern SOTA ops · <b>oracle-proven solvable</b>.</li>
+    <li>Agentic kernel-gen is a <b>2025–26 frontier</b> — closest prior work: Robust-KBench (→CUDA) &amp; AMD (→Triton-from-Triton).</li>
+    <li><b>What's distinctive about ours</b>: agentic <b>pytorch→Triton from scratch</b> · beat <b>torch.compile</b> · modern SOTA ops · <b>oracle-proven solvable</b>.</li>
   </ul>
 </section>
 
@@ -459,7 +459,7 @@
     <div>
       <h3>Future work</h3>
       <ul class="small">
-        <li>① <b>Extend to more modern, complex architectures</b> (more 2025 ops, longer context, larger turn budgets).</li>
+        <li>① <b>Extend to more modern architectures and their latest tricky numerical contracts</b> (longer context, larger turn budgets).</li>
         <li>② <b>Train with it</b> — use the speedup-over-<code>torch.compile</code> as a dense <b>RL reward</b>.</li>
       </ul>
     </div>
