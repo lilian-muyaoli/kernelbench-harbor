@@ -42,11 +42,10 @@ GPT > Opus > flash and no family solved by all three.
   a **pass-validated oracle**, so even the hard tail is provably solvable — the difficulty is in
   the operator, not a broken gate.
 
-- **Agentic helps strong models, hurts weak ones.** GPT-5.5 / Opus-4.8 use the multi-turn loop to
-  fix compile errors and iterate; Gemini-flash degrades under the agent protocol (it repeatedly
-  copied the instruction's placeholder instead of real code). flash's agentic 10% is **below** its
-  single-shot rate — iterative refinement only helps a model that can drive the terminal. (Same
-  instruction for all three → a capability gap, not an unfair prompt.)
+- **Capable models turn the feedback loop into fixes.** GPT-5.5 / Opus-4.8 read compiler/profiler
+  feedback and fix errors over turns — this is the value the agentic loop adds over single-shot. As
+  a probe we measured single-shot mainly on GPT-5.5: it goes from **≈25% single-shot to 40% agentic
+  pass@1** (e.g. it fails NSA single-shot, then iterates to a passing 1.18× kernel).
 
 - **Difficulty tracks baseline strength.** We keep families where `torch.compile` / cuBLAS leave
   real fusion headroom (quant GEMM, MoE, FP8, MLA, NSA); we drop weak-baseline ops (vanilla

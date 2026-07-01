@@ -63,9 +63,9 @@ three. Three families are unsolved by any model (the hard tail) yet all 10 have 
 | fused_qmoe (Mixtral) | ✗ | ✗ | ✗ |
 | multi_lora_qgemm (Llama-3-8B) | ✗ | ✗ | ✗ |
 
-Single-shot comparison (KernelBench's protocol, same families): GPT-5.5 ≈ 25%, Opus-4.8 ≈ 38%,
-Gemini-3.5 ≈ 38% pass@1 ([results/SINGLE_SHOT.md](results/SINGLE_SHOT.md)). Flash is *better*
-single-shot than agentic — iterative refinement only helps a model that can drive the terminal.
+We also noticed a single-vs-agentic gap that motivated the agentic design: models often fail a
+kernel on the first try but fix it over a few turns. For example, GPT-5.5 goes from ≈25% single-shot
+to 40% agentic pass@1 — e.g. it fails NSA single-shot, then iterates to a passing 1.18× kernel.
 
 ## The 10 families
 
@@ -86,7 +86,7 @@ common/
 generate_tasks.py             task generator (template x grid -> Harbor dirs, embeds oracle)
 validate/                     Modal scripts: difficulty probe + oracle check
 results/
-  RESULTS.md, SINGLE_SHOT.md  results + insights
+  RESULTS.md                  results + insights
   compute_passk.py            reproduce the pass@1/@2 table from the logs
   jobs/<Model>/sample{1,2}/   Harbor agentic trajectories (run evidence)
 docs/SCALING.md               scaling pipeline 10s -> 100K

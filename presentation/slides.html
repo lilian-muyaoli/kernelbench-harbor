@@ -336,20 +336,18 @@
 <!-- §4 single vs agentic -->
 <section class="slide">
   <div class="eyebrow">§4 · Model results</div>
-  <h2>Finding: agentic helps strong models, hurts weak ones</h2>
+  <h2>Finding: capable models turn the feedback loop into fixes</h2>
   <div class="grid2">
-    <div class="card"><h3 class="blue">GPT — iteration repairs</h3>
-      <p class="small">Single-shot ≈ 25% → agentic pass@1 <b>40%</b>; fixes compile errors over turns.
-      <br>e.g. NSA: unsolved single-shot → iterates to a passing <b>1.18×</b> kernel.</p></div>
-    <div class="card"><h3 style="color:#f0883e">flash — the scaffold degrades it</h3>
-      <p class="small">Single-shot ≈ 38% → agentic pass@2 only <b>10%</b>; repeatedly wrote the
-      instruction's <code>&lt;your full python code here&gt;</code> placeholder — no other model did,
-      revealing weaker reasoning.</p></div>
+    <div class="card"><h3 class="blue">GPT-5.5 — iteration repairs</h3>
+      <p class="small">≈25% single-shot → <b>40%</b> agentic pass@1: it reads compiler/profiler
+      feedback and fixes errors over turns — e.g. fails NSA single-shot, then iterates to a passing
+      <b>1.18×</b> kernel. That gain is the value the agentic loop adds.</p></div>
+    <div class="card"><h3 style="color:#f0883e">flash — weakest of the three</h3>
+      <p class="small">10% pass@2 — it rarely turns the compiler/profiler feedback into a correct,
+      faster kernel.</p></div>
   </div>
-  <p class="quote">Iterative refinement only helps a model that can drive the terminal and learn from the feedback.</p>
-  <p class="small muted">This single-vs-agentic <b>capability gap</b> is the core motivation — some tasks
-  models fail single-shot but fix after iterations, which sets our benchmark apart from the mostly
-  single-shot prior work.</p>
+  <p class="quote">The agentic loop pays off when a model can act on feedback — some fail a kernel single-shot but fix it over turns.</p>
+  <p class="small muted">(Single-shot was probed mainly on GPT — a motivating observation, not a headline metric.)</p>
 </section>
 
 <!-- §5 QC -->
@@ -417,7 +415,7 @@
 <!-- RELATED WORK -->
 <section class="slide">
   <div class="eyebrow">Related work · why ours stands out</div>
-  <h2>We occupy the open point of a brand-new frontier</h2>
+  <h2>Where ours sits in a brand-new frontier</h2>
   <table style="font-size:1.12vw">
     <tr><th>Benchmark</th><th>Interaction</th><th>Task</th><th>Baseline</th></tr>
     <tr><td>KernelBench ('24)</td><td>single-shot</td><td>PyTorch→CUDA/Triton</td><td>eager</td></tr>
