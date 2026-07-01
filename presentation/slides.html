@@ -339,15 +339,14 @@
   <h2>Finding: capable models turn the feedback loop into fixes</h2>
   <div class="grid2">
     <div class="card"><h3 class="blue">GPT-5.5 — iteration repairs</h3>
-      <p class="small">≈25% single-shot → <b>40%</b> agentic pass@1: it reads compiler/profiler
-      feedback and fixes errors over turns — e.g. fails NSA single-shot, then iterates to a passing
-      <b>1.18×</b> kernel. That gain is the value the agentic loop adds.</p></div>
+      <p class="small">Reads compiler/profiler feedback and fixes errors over turns — e.g. it lands a
+      passing <b>1.18×</b> NSA kernel by iterating through compile errors. That's the value the
+      agentic loop adds.</p></div>
     <div class="card"><h3 style="color:#f0883e">flash — weakest of the three</h3>
       <p class="small">10% pass@2 — it rarely turns the compiler/profiler feedback into a correct,
       faster kernel.</p></div>
   </div>
-  <p class="quote">The agentic loop pays off when a model can act on feedback — some fail a kernel single-shot but fix it over turns.</p>
-  <p class="small muted">(Single-shot was probed mainly on GPT — a motivating observation, not a headline metric.)</p>
+  <p class="quote">The agentic loop pays off when a model can act on feedback — fix the compile error first, then make it fast.</p>
 </section>
 
 <!-- §5 QC -->
