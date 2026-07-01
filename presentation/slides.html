@@ -259,11 +259,14 @@
   <div class="grid2">
     <div>
       <p class="lead">Fusion alone isn't hard. The gap is the <b class="accent">exact dequant /
-      scaling spec</b> the kernel must match, such as:</p>
+      scaling spec</b> the kernel must match, e.g.:</p>
       <ul>
-        <li>packed <b>asymmetric</b> int4 + zero-points</li>
-        <li>fp8 / int8 block-scaling &amp; requant</li>
-        <li>per-token gather · top-k <b>block selection</b> · MLA absorb</li>
+        <li><b>W4A16</b>: <code>w = (unpack4(qweight) − zero[g]) × scale[g]</code> — unpack nibbles
+          in the right order, per-group <b>asymmetric</b> zero-point</li>
+        <li><b>FP8 block-scale</b>: <code>s = amax(block)/448; q = round_e4m3(x/s); out = q·s</code>
+          per 128-group</li>
+        <li><b>NSA select</b>: score KV blocks by mean-key, keep the top-k <b>causal</b> blocks,
+          attend only within them</li>
       </ul>
     </div>
     <div class="card">
